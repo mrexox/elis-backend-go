@@ -1,0 +1,30 @@
+{
+    "data":{
+	"type":"posts",
+	"id":"1",
+	"attributes":{
+	    "name":"post1",
+	    "text":"lalalalalal",
+	    "permalink":"my-post",
+	    "likes":0,
+	    "created-at":"2025-05-17"
+	},
+	"relationships":{
+	    "tags":{
+		"data":[{
+		    "type":"tag",
+		    "id":"1"
+		}]
+	    }
+	}
+    },
+    "included":[
+	{
+	    "type":"tags",
+	    "id":"1",
+	    "attributes":{
+		"tag-name":"tag1"
+	    }
+	}
+    ]
+}
