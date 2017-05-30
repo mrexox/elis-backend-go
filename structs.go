@@ -17,10 +17,11 @@ type (
 
 	Tag struct {
 		ID   string `json:"-"`
-		Name string `json:"tag-name"`
+		Name string `json:"name"`
 	}
 
 	Image struct {
+		ID  string `json:"-"`
 		Url string `json:"url"`
 	}
 
@@ -49,10 +50,13 @@ func (p Post) GetID() string {
 func (t Tag) GetID() string {
 	return t.ID
 }
+func (i Image) GetID() string {
+	return i.ID
+}
 func (p Post) GetReferences() []jsonapi.Reference {
 	return []jsonapi.Reference{
 		{
-			Type: "tag",
+			Type: "tags",
 			Name: "tags",
 		},
 	}
@@ -71,7 +75,7 @@ func (p Post) GetReferencedIDs() []jsonapi.ReferenceID {
 	for _, TagID := range p.TagsIDs {
 		result = append(result, jsonapi.ReferenceID{
 			ID:   TagID,
-			Type: "tag",
+			Type: "tags",
 			Name: "tags",
 		})
 	}
@@ -79,7 +83,7 @@ func (p Post) GetReferencedIDs() []jsonapi.ReferenceID {
 	return result
 }
 func (p *Post) SetToManyReferenceIDs(name string, IDs []string) error {
-	if name == "tag" {
+	if name == "tags" {
 		p.TagsIDs = IDs
 		return nil
 	}
@@ -87,7 +91,7 @@ func (p *Post) SetToManyReferenceIDs(name string, IDs []string) error {
 	return errors.New("There is no to-many relationship with the name " + name)
 }
 func (p *Post) AddToManyIDs(name string, IDs []string) error {
-	if name == "tag" {
+	if name == "tags" {
 		p.TagsIDs = append(p.TagsIDs, IDs...)
 		return nil
 	}
