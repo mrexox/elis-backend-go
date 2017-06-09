@@ -2,27 +2,40 @@
     "data":{
 	"type":"posts",
 	"id":"1",
-	"attributes":{
+	"attributes":
+	{
 	    "name":"post1",
 	    "text":"lalalalalal",
 	    "permalink":"my-post",
+	    "visible":false,
+	    "cover":
+	    {
+		"url": "/pictures/lalala.jpg"
+            },
 	    "likes":0,
 	    "created-at":"2025-05-17"
 	},
-	"relationships":{
-	    "tags":{
-		"data":[{
+	"relationships":
+	{
+	    "tags":
+	    {
+		"data":
+		[
+		    {
 		    "type":"tag",
 		    "id":"1"
-		}]
+		    }
+		]
 	    }
 	}
     },
-    "included":[
+    "included":
+    [
 	{
 	    "type":"tags",
 	    "id":"1",
-	    "attributes":{
+	    "attributes":
+	    {
 		"tag-name":"tag1"
 	    }
 	}

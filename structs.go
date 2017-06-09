@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql" // for NullString
 	"errors"
 	"github.com/manyminds/api2go/jsonapi"
 )
@@ -29,7 +30,9 @@ type (
 		ID        string   `json:"-"`
 		Name      string   `json:"name"`
 		Content   string   `json:"text"`
+		Visible   bool     `json:"visible"`
 		Permalink string   `json:"permalink"`
+		Cover     Image    `json:"cover"`
 		Tags      []Tag    `json:"-"`
 		TagsIDs   []string `json:"-"`
 		Likes     uint16   `json:"likes"`
@@ -37,21 +40,36 @@ type (
 	}
 
 	Message struct {
-		Phone string `json:"phone"`
-		Email string `json:"e-mail"`
-		Text  string `json:"text"`
-		Theme string `json:"theme"`
+		ID        string         `json:"-"`
+		Phone     sql.NullString `json:"phone"`
+		Email     sql.NullString `json:"e-mail"`
+		Text      string         `json:"text"`
+		Author    sql.NullString `json:"author-name"`
+		Theme     sql.NullString `json:"theme"`
+		CreatedAt string         `json:"created-at"`
 	}
 )
 
 func (p Post) GetID() string {
 	return p.ID
 }
+func (p Post) SetID(id string) error {
+	p.ID = id
+	return nil
+}
 func (t Tag) GetID() string {
 	return t.ID
 }
+func (t Tag) SetID(id string) error {
+	t.ID = id
+	return nil
+}
 func (i Image) GetID() string {
 	return i.ID
+}
+func (i Image) SetID(id string) error {
+	i.ID = id
+	return nil
 }
 func (p Post) GetReferences() []jsonapi.Reference {
 	return []jsonapi.Reference{

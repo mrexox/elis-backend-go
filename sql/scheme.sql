@@ -24,12 +24,16 @@ CREATE TABLE portfolio_image (
 
 CREATE TABLE post (
   id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(50),
-  content TEXT,
-  permalink VARCHAR(100) NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  content TEXT NOT NULL,
+  cover INT, -- cover of a post
+  permalink VARCHAR(100) NOT NULL UNIQUE,
   created_at DATE NOT NULL,
+  visible BOOLEAN NOT NULL DEFAULT FALSE,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (cover)
+    REFERENCES image (id)
 );
 
 CREATE TABLE tag (
@@ -58,10 +62,10 @@ CREATE TABLE message (
   id INT NOT NULL AUTO_INCREMENT,
   phone VARCHAR(20),
   email VARCHAR(30),
-  content TEXT,
+  content TEXT NOT NULL,
   name VARCHAR(20),
   theme VARCHAR(20),
-  created_at DATE,
+  created_at DATE NOT NULL,
 
   PRIMARY KEY (id)
 );

@@ -17,14 +17,15 @@ func blogPost(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	permalink := p.ByName("permalink")
 	db, err := db()
 	row := db.QueryRow(`
-SELECT p.id, p.name, p.content, p.permalink, p.created_at, IFNULL(likes.likes, 0)
+SELECT p.id, p.name, p.content, p.permalink, p.created_at, IFNULL(likes.likes, 0), p.cover
 FROM post p LEFT OUTER JOIN (SELECT post_id, COUNT(ip) AS  likes
                       FROM liker
                       GROUP BY post_id) likes ON p.id = likes.post_id
-WHERE permalink = ?;
+WHERE permalink = ? AND visible = TRUE;
 	`, permalink)
 	var post Post
-	err = row.Scan(&post.ID, &post.Name, &post.Content, &post.Permalink, &post.CreatedAt, &post.Likes)
+	var coverID sql.NullInt64
+	err = row.Scan(&post.ID, &post.Name, &post.Content, &post.Permalink, &post.CreatedAt, &post.Likes, &coverID)
 	if err == sql.ErrNoRows {
 		sendErr(w, err, "404", http.StatusNotFound)
 		return
@@ -32,7 +33,20 @@ WHERE permalink = ?;
 		sendErr(w, err, "Error while scanning row in blogPost", http.StatusInternalServerError)
 		return
 	}
-
+	if coverID.Valid {
+		row := db.QueryRow(`
+SELECT id, url
+FROM image
+WHERE id = ?
+`, coverID)
+		var image Image
+		err := row.Scan(&image.ID, &image.Url)
+		if err != nil {
+			sendErr(w, err, "Error while trying to get an image for a post", http.StatusInternalServerError)
+			return
+		}
+		post.Cover = image
+	}
 	// Get tags of this post
 	rows, err := db.Query(`
 			SELECT t.id, t.name

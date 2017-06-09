@@ -1,0 +1,15 @@
+package main
+
+import (
+	//	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/julienschmidt/httprouter"
+	//"github.com/manyminds/api2go/jsonapi"
+	"log"
+	"net/http"
+)
+
+func addPost(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	log.Println("Accepted")
+	accepted(w)
+}
